@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group 'com.funbiscuit'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
+    implementation 'info.picocli:picocli:4.6.1'
+
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+jar {
+    archiveFileName.set("${rootProject.getName()}.${archiveExtension.get()}")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE // exclude duplicates
+    manifest {
+        attributes(
+                'Main-Class': 'com.funbiscuit.pdfconvert.PdfMain'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
