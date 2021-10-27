@@ -3,30 +3,46 @@ package com.funbiscuit.pdfconvert;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "checksum", mixinStandardHelpOptions = true, version = "pdf-convert 1.0",
+@Command(name = "pdf-convert", mixinStandardHelpOptions = true, version = "pdf-convert 0.1",
         description = "Converts pdf document to png images.")
 class PdfConvertCommand implements Callable<Integer> {
 
-    @CommandLine.Parameters(index = "0", description = "The pdf to convert.")
+    @Parameters(index = "0", description = "The pdf to convert.")
     private File file;
 
-    @CommandLine.Option(names = {"--dpi"}, description = "300, 600, ...")
+    @Option(names = {"--dpi"}, description = "300, 600, ...")
     private int dpi = 300;
 
-    @CommandLine.Option(names = {"--output"}, description = "Where to store generated files (current directory by default)")
-    private String outputDir = ".";
+    @Option(names = {"--out-dir"}, description = "Where to store generated files (current directory by default)")
+    private String outputDir = "";
 
     @Override
     public Integer call() throws Exception {
 
         long start = System.currentTimeMillis();
+
+        if (outputDir.isEmpty()) {
+            outputDir = ".";
+        }
+
+        String filename = file.getName();
+        if (!filename.toLowerCase().endsWith(".pdf")) {
+            System.out.println("Invalid pdf filename: '" + filename + "'");
+            return -1;
+        }
+
+        filename = filename.substring(0, filename.length() - 4);
+
+        outputDir += "/" + filename + "/";
 
         File parentDir = new File(outputDir);
         if (!parentDir.mkdirs()) {
