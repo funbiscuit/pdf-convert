@@ -45,7 +45,7 @@ class PdfConvertCommand implements Callable<Integer> {
         outputDir += "/" + filename + "/";
 
         File parentDir = new File(outputDir);
-        if (!parentDir.mkdirs()) {
+        if (!parentDir.exists() && !parentDir.mkdirs()) {
             System.out.println("Can't create output directory '" + outputDir + "'");
             return -1;
         }
