@@ -32,6 +32,40 @@ jobs:
           name: pdf-convert.jar
           path: build/libs/pdf-convert.jar
 
+  build-win-native:
+    name: Build native image for Windows
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ayltai/setup-graalvm@v1
+        with:
+          java-version: 11
+          graalvm-version: 21.3.0
+          native-image: false
+
+      - name: Set up Visual Studio x64 shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
+
+      - name: Build image
+        run: ./gradlew nativeBuild
+
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v1
+        with:
+          version: latest
+          file: ./build/native/nativeBuild/pdf-convert.exe
+          args: --best -fq
+
+      - name: Upload native-image
+        uses: actions/upload-artifact@v2
+        with:
+          name: pdf-convert-win_x64
+          path: build/native/nativeBuild
+
   add-release-assets:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
