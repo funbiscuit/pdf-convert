@@ -1,0 +1,17 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "\\Qorg/apache/fontbox/cmap/Identity-H\\E"
+      },
+      {
+        "pattern": "\\Qorg/apache/pdfbox/resources/\\E.*"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "sun.awt.resources.awt"
+    }
+  ]
+}
