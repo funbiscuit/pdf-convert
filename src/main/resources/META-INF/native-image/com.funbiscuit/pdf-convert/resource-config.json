@@ -2,10 +2,13 @@
   "resources": {
     "includes": [
       {
-        "pattern": "\\Qorg/apache/fontbox/cmap/Identity-H\\E"
+        "pattern": "\\Qorg/apache/fontbox/cmap/\\E.*"
       },
       {
         "pattern": "\\Qorg/apache/pdfbox/resources/\\E.*"
+      },
+      {
+        "pattern": ".*\\.pf"
       }
     ]
   },

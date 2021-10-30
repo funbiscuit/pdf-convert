@@ -273,6 +273,17 @@
     ]
   },
   {
+    "name": "java.awt.color.ICC_Profile",
+    "fields": [
+      {
+        "name": "cmmProfile"
+      }
+    ]
+  },
+  {
+    "name": "java.awt.color.ICC_ProfileRGB"
+  },
+  {
     "name": "java.awt.desktop.UserSessionEvent$Reason",
     "fields": [
       {
@@ -593,10 +604,32 @@
     ]
   },
   {
+    "name": "sun.awt.AWTAutoShutdown",
+    "methods": [
+      {
+        "name": "notifyToolkitThreadBusy",
+        "parameterTypes": []
+      },
+      {
+        "name": "notifyToolkitThreadFree",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "sun.awt.SunHints",
     "fields": [
       {
         "name": "INTVAL_STROKE_PURE"
+      }
+    ]
+  },
+  {
+    "name": "sun.awt.SunToolkit",
+    "methods": [
+      {
+        "name": "isTouchKeyboardAutoShowEnabled",
+        "parameterTypes": []
       }
     ]
   },
@@ -644,6 +677,37 @@
       },
       {
         "name": "type"
+      }
+    ]
+  },
+  {
+    "name": "sun.awt.image.BytePackedRaster",
+    "fields": [
+      {
+        "name": "data"
+      },
+      {
+        "name": "dataBitOffset"
+      },
+      {
+        "name": "pixelBitStride"
+      },
+      {
+        "name": "scanlineStride"
+      },
+      {
+        "name": "type"
+      }
+    ]
+  },
+  {
+    "name": "sun.awt.image.ImageRepresentation",
+    "fields": [
+      {
+        "name": "numSrcLUT"
+      },
+      {
+        "name": "srcLUTtransIndex"
       }
     ]
   },
@@ -848,6 +912,9 @@
         "name": "width"
       }
     ]
+  },
+  {
+    "name": "sun.java2d.cmm.lcms.LCMSProfile"
   },
   {
     "name": "sun.java2d.cmm.lcms.LCMSTransform",
