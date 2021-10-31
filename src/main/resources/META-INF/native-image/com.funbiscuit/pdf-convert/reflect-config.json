@@ -22,6 +22,32 @@
     "queryAllDeclaredMethods": true
   },
   {
+    "name": "java.lang.ProcessHandle",
+    "methods": [
+      {
+        "name": "current",
+        "parameterTypes": []
+      },
+      {
+        "name": "info",
+        "parameterTypes": []
+      },
+      {
+        "name": "parent",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "java.lang.ProcessHandle$Info",
+    "methods": [
+      {
+        "name": "command",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "java.lang.String"
   },
   {

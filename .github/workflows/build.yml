@@ -60,6 +60,11 @@ jobs:
           file: ./build/native/nativeBuild/pdf-convert.exe
           args: --best -fq
 
+      - name: Test if executable can convert pdf to png
+        run: |
+          ./build/native/nativeBuild/pdf-convert.exe -p --dpi 150 ./pdf/sample.pdf
+          if(!(Test-Path -Path ./sample/1.png -PathType Leaf)) { exit -1 }
+
       - name: Upload native-image
         uses: actions/upload-artifact@v2
         with:

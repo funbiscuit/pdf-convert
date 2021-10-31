@@ -1,5 +1,8 @@
 package com.funbiscuit.pdfconvert;
 
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -10,7 +13,12 @@ import picocli.CommandLine.Parameters;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 
 @Command(name = "pdf-convert", mixinStandardHelpOptions = true, version = "pdf-convert 0.1",
         description = "Converts pdf document to png images.")
@@ -21,6 +29,9 @@ class PdfConvertCommand implements Callable<Integer> {
 
     @Option(names = {"--dpi"}, description = "300, 600, ...")
     private int dpi = 300;
+
+    @Option(names = {"-p", "--progress"}, description = "Display progress of conversion")
+    private boolean progress = false;
 
     @Option(names = {"--out-dir"}, description = "Where to store generated files (current directory by default)")
     private String outputDir = "";
@@ -50,19 +61,42 @@ class PdfConvertCommand implements Callable<Integer> {
             return -1;
         }
 
-        PDDocument document = PDDocument.load(file);
-        PDFRenderer pdfRenderer = new PDFRenderer(document);
-        for (int page = 0; page < document.getNumberOfPages(); ++page) {
-            BufferedImage bim = pdfRenderer.renderImageWithDPI(
-                    page, dpi, ImageType.RGB);
-            File outfile = new File(parentDir, String.format("%d.%s", page + 1, "png"));
-            ImageIO.write(bim, "png", outfile);
+        try (PDDocument document = PDDocument.load(file)) {
+            Stream<Integer> pages = IntStream.range(0, document.getNumberOfPages()).boxed();
+
+            if (progress) {
+                pages = ProgressBar.wrap(pages, new ProgressBarBuilder()
+                        .setTaskName("Convert to PNG")
+                        .setUpdateIntervalMillis(500)
+                        .setStyle(ProgressBarStyle.ASCII));
+            }
+
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+            pages.forEach(page -> renderPage(page, pdfRenderer)
+                    .ifPresent(img -> saveImage(img, parentDir, page + 1)));
         }
-        document.close();
+
         double dur = (double) System.currentTimeMillis() - start;
         dur /= 1000;
         System.out.println("Conversion took: " + dur + "s");
 
         return 0;
+    }
+
+    private Optional<BufferedImage> renderPage(int pageIndex, PDFRenderer pdfRenderer) {
+        try {
+            return Optional.of(pdfRenderer.renderImageWithDPI(pageIndex, dpi, ImageType.RGB));
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
+    private void saveImage(BufferedImage image, File parentDir, int index) {
+        try {
+            ImageIO.write(image, "png", new File(parentDir, String.format("%d.%s", index, "png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
