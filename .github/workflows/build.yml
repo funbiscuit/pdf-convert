@@ -57,7 +57,7 @@ jobs:
         uses: crazy-max/ghaction-upx@v1
         with:
           version: latest
-          file: ./build/native/nativeBuild/pdf-convert.exe
+          files: ./build/native/nativeBuild/pdf-convert.exe
           args: --best -fq
 
       - name: Test if executable can convert pdf to png
