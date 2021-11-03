@@ -38,6 +38,17 @@ class PdfConvertCommand implements Callable<Integer> {
     @Option(names = {"-t", "--threads"}, description = "Number of threads to use for conversion")
     private int numThreads = Runtime.getRuntime().availableProcessors();
 
+    @Option(names = {"--page", "--pages"}, description = "Pages to convert (one of the following formats):\n" +
+            "7\t\t- convert page 7\n" +
+            "2:6\t\t- convert pages from 2 to 6\n" +
+            "1:3:10\t- convert pages 1, 4, 7 and 10 (1 to 10 with step 3)\n" +
+            "5:2:end\t- convert odd pages from 5 to the end\n" +
+            "5:end-2\t- convert pages from 5 to the end (not including last two pages)\n" +
+            "1,3,8,9\t- convert pages 1,3,8,9\n" +
+            "1,5:end\t- convert page 1 and from 5 to the end (comma separated list of different formats)"
+    )
+    private String pages = "1:end";
+
     @Override
     public Integer call() throws Exception {
 
@@ -63,6 +74,14 @@ class PdfConvertCommand implements Callable<Integer> {
             return -1;
         }
 
+        IntRange pageRange;
+        try {
+            pageRange = IntRange.of(pages);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid page range: '" + pages + "'");
+            return -1;
+        }
+
         try (PdfDocProcessor docProcessor = new PdfDocProcessor(file, numThreads)) {
             if (progress) {
                 progressBar = new ProgressBarBuilder()
@@ -73,7 +92,7 @@ class PdfConvertCommand implements Callable<Integer> {
                 docProcessor.setOnClose(progressBar::close);
             }
 
-            docProcessor.processPages((page, total, document) -> {
+            docProcessor.processPages(pageRange, (page, total, document) -> {
                 if (progressBar != null) {
                     progressBar.maxHint(total);
                     progressBar.step();

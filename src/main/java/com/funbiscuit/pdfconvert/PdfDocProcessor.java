@@ -7,24 +7,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class PdfDocProcessor implements AutoCloseable {
-    private final File file;
     private final ExecutorService executorService;
 
-    private final List<PDDocument> documents = new ArrayList<>();
+    private final BlockingQueue<PDDocument> documents = new LinkedBlockingQueue<>();
+
     private int numberOfPages;
 
     @Setter
-    private Runnable onClose = () -> {
-    };
+    private Runnable onClose;
 
     public PdfDocProcessor(File file, int numThreads) {
-        this.file = file;
         this.executorService = Executors.newFixedThreadPool(numThreads);
         for (int i = 0; i < numThreads; i++) {
             try {
@@ -53,16 +48,23 @@ public class PdfDocProcessor implements AutoCloseable {
                 e.printStackTrace();
             }
         }
-        onClose.run();
+        if (onClose != null) {
+            onClose.run();
+        }
     }
 
-    public void processPages(PageProcessor pageProcessor) {
+    public void processPages(IntRange range, PageProcessor pageProcessor) {
         List<Future<?>> futures = new ArrayList<>();
-        for (int i = 0; i < numberOfPages; i++) {
-            int page = i;
-            futures.add(executorService.submit(() ->
-                    pageProcessor.process(page, numberOfPages,
-                            documents.get(page % documents.size()))));
+        List<Integer> pages = range.getValues(numberOfPages);
+        int count = pages.size();
+        for (int page : pages) {
+            futures.add(executorService.submit((Callable<Void>) (() ->
+            {
+                PDDocument document = documents.take();
+                pageProcessor.process(page - 1, count, document);
+                documents.add(document);
+                return null;
+            })));
         }
 
         for (Future<?> future : futures) {
