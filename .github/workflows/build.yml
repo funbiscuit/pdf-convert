@@ -93,14 +93,14 @@ jobs:
         uses: crazy-max/ghaction-upx@v1
         with:
           version: latest
-          files: ./build/native/nativeImage/pdf-convert
+          files: ./build/native/nativeBuild/pdf-convert
           args: --best -fq
 
       - name: Upload native-image
         uses: actions/upload-artifact@v2
         with:
           name: pdf-convert-linux_x64
-          path: build/native/nativeImage/pdf-convert
+          path: build/native/nativeBuild/pdf-convert
 
   add-release-assets:
     runs-on: ubuntu-latest
