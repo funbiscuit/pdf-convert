@@ -3,6 +3,31 @@
     "name": "[Lsun.java2d.loops.GraphicsPrimitive;"
   },
   {
+    "name": "com.apple.eawt._AppEventHandler",
+    "methods": [
+      {
+        "name": "handleNativeNotification",
+        "parameterTypes": [
+          "int"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "com.apple.eawt._AppMenuBarHandler",
+    "methods": [
+      {
+        "name": "initMenuStates",
+        "parameterTypes": [
+          "boolean",
+          "boolean",
+          "boolean",
+          "boolean"
+        ]
+      }
+    ]
+  },
+  {
     "name": "com.sun.imageio.plugins.jpeg.JPEGImageReader",
     "methods": [
       {
@@ -378,6 +403,20 @@
     ]
   },
   {
+    "name": "java.awt.geom.Rectangle2D$Double",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "double",
+          "double",
+          "double",
+          "double"
+        ]
+      }
+    ]
+  },
+  {
     "name": "java.awt.image.BufferedImage",
     "fields": [
       {
@@ -591,6 +630,12 @@
   {
     "name": "java.lang.System",
     "methods": [
+      {
+        "name": "getProperty",
+        "parameterTypes": [
+          "java.lang.String"
+        ]
+      },
       {
         "name": "load",
         "parameterTypes": [
@@ -1428,6 +1473,23 @@
     ]
   },
   {
+    "name": "sun.java2d.opengl.OGLSurfaceData",
+    "fields": [
+      {
+        "name": "isBIOpShaderEnabled"
+      },
+      {
+        "name": "isFBObjectEnabled"
+      },
+      {
+        "name": "isGradShaderEnabled"
+      },
+      {
+        "name": "isLCDShaderEnabled"
+      }
+    ]
+  },
+  {
     "name": "sun.java2d.pipe.Region",
     "fields": [
       {
@@ -1497,6 +1559,15 @@
       },
       {
         "name": "xid"
+      }
+    ]
+  },
+  {
+    "name": "sun.lwawt.macosx.LWCToolkit",
+    "methods": [
+      {
+        "name": "installToolkitThreadInJava",
+        "parameterTypes": []
       }
     ]
   }

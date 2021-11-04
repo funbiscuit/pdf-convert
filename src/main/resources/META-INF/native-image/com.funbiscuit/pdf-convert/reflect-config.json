@@ -51,6 +51,15 @@
     "name": "java.lang.String"
   },
   {
+    "name": "java.lang.System",
+    "methods": [
+      {
+        "name": "console",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "java.nio.file.Path"
   },
   {
@@ -376,6 +385,15 @@
     "queryAllDeclaredMethods": true
   },
   {
+    "name": "sun.awt.CGraphicsEnvironment",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "sun.awt.Win32GraphicsEnvironment",
     "methods": [
       {
@@ -494,6 +512,15 @@
   },
   {
     "name": "sun.java2d.marlin.DMarlinRenderingEngine",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "sun.lwawt.macosx.LWCToolkit",
     "methods": [
       {
         "name": "<init>",

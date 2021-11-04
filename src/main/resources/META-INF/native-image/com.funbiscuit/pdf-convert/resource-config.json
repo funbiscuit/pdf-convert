@@ -21,6 +21,9 @@
   "bundles": [
     {
       "name": "sun.awt.resources.awt"
+    },
+    {
+      "name": "sun.awt.resources.awtosx"
     }
   ]
 }
