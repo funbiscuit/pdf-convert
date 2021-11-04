@@ -85,7 +85,6 @@ jobs:
           graalvm-version: 21.3.0
           native-image: false
 
-
       - name: Build image
         run: chmod +x gradlew && ./gradlew nativeBuild
 
@@ -96,11 +95,41 @@ jobs:
           files: ./build/native/nativeBuild/pdf-convert
           args: --best -fq
 
+      - name: Test if executable can convert pdf to png
+        run: |
+          ./build/native/nativeBuild/pdf-convert -p --dpi 150 ./pdf/sample.pdf
+          test -f ./sample/1.png || exit -1
+
       - name: Upload native-image
         uses: actions/upload-artifact@v2
         with:
           name: pdf-convert-linux_x64
           path: build/native/nativeBuild/pdf-convert
+
+  build-macos-native:
+    name: Build native image for MacOS
+
+    runs-on: macos-10.15
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ayltai/setup-graalvm@v1
+        with:
+          java-version: 11
+          graalvm-version: 21.3.0
+          native-image: false
+
+      - name: Build image
+        run: chmod +x gradlew && ./gradlew nativeBuild
+
+      - name: Add image to archive
+        run: cd ./build/native/nativeBuild && zip pdf-convert.zip pdf-convert
+
+      - name: Upload native-image
+        uses: actions/upload-artifact@v2
+        with:
+          name: pdf-convert-macos_x64.zip
+          path: build/native/nativeBuild/pdf-convert.zip
 
   add-release-assets:
     runs-on: ubuntu-latest
