@@ -144,10 +144,32 @@ jobs:
         working-directory: artifacts
         run: ls -R
 
+      - name: Zip artifacts
+      - uses: papeloto/action-zip@v1
+        with:
+          files: artifacts/pdf-convert-win_x64/
+          dest: pdf-convert-win_x64.zip
+
       - uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: artifacts/pdf-convert.jar/pdf-convert.jar
           tag: ${{ github.ref }}
           asset_name: pdf-convert.jar
+          overwrite: true
+
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: pdf-convert-win_x64.zip
+          tag: ${{ github.ref }}
+          asset_name: pdf-convert-win_x64.zip
+          overwrite: true
+
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: artifacts/pdf-convert-linux_x64/pdf-convert
+          tag: ${{ github.ref }}
+          asset_name: pdf-convert-linux_x64
           overwrite: true
